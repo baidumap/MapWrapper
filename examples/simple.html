@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <title> MapWrapper 示例 </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/library/MapWrapper/1.2/src/MapWrapper.min.js"></script>  
+ </head>
+
+ <body>
+    <div><h3>横向是转化后Google坐标，纵向是转化后的GPS坐标</h1></div>
+    <div id="divMap" style="width:600px;height:500px;border:solid 1px gray"></div>     
+ </body>
+ <script type="text/javascript">
+ <!--    
+
+    var myMap = new BMap.Map("divMap");
+    myMap.centerAndZoom(new BMap.Point(116.404, 39.915), 12);
+    
+    //可以转化gps坐标
+    var mapWforGPS = new BMapLib.MapWrapper(myMap, BMapLib.COORD_TYPE_GPS); 
+    
+    //可以转化google坐标
+    var mapWforGoogle = new BMapLib.MapWrapper(myMap, BMapLib.COORD_TYPE_GOOGLE); 
+    
+    
+    for(var i = 0; i < 30; i++){
+        
+        //添加gps坐标mkr
+        var gpsMkr = new BMap.Marker(new BMap.Point(/*GPS坐标*/116.397428, 39.75923 + i * 0.01));
+                
+        (function(i){
+            gpsMkr.addEventListener("click", function(){
+                var strXY = this.getPosition().lng.toFixed(3) + ", " + this.getPosition().lat.toFixed(3);
+                var infoWin = new BMap.InfoWindow("GPS-" + i + ": " + strXY);
+                this.openInfoWindow(infoWin);
+            });
+        })(i);
+        
+        mapWforGPS.addOverlay(gpsMkr);
+
+
+        //添加google坐标mkr
+        var googleMkr = new BMap.Marker(new BMap.Point(/*Google坐标*/116.250 + i * 0.01, 39.910));
+
+        (function(i){
+            googleMkr.addEventListener("click", function(){
+                var strXY = this.getPosition().lng.toFixed(3) + ", " + this.getPosition().lat.toFixed(3);
+                var infoWin = new BMap.InfoWindow("Google-" + i + ": " + strXY);
+                this.openInfoWindow(infoWin);
+            });
+        })(i);
+
+        mapWforGoogle.addOverlay(googleMkr);
+
+    }    
+    
+ //-->
+ </script>
+</html>
